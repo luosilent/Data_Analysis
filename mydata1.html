@@ -2,9 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="js/echarts.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
     <title>Title</title>
 </head>
 <body>
+<div id="main1" style="width: 800px;height:500px;"></div>
+<div id="main2" style="width: 800px;height:500px;"></div>
 
 </body>
 </html>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+    var option1 = {
+        title: {
+            text: '纵横小说排行榜'
+        },
+        tooltip: {},
+        legend: {
+            data:['日点击榜','周点击榜','月点击榜','总点击榜']
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [
+            {   name: '日点击榜',
+                type: 'bar',
+                data: []
+            },
+            {   name: '周点击榜',
+                type: 'bar',
+                data: []
+            },
+            {   name: '月点击榜',
+                type: 'bar',
+                data: []
+            },
+            {   name: '总点击榜',
+                type: 'bar',
+                data: []
+            }
+        ]
+    };
+    // 异步加载数据
+    $.get('data.json').done(function (data) {
+        // 填入数据
+        myChart1.setOption({
+            xAxis: {
+                data: data.categories
+            },
+            series: [{
+                // 根据名字对应到相应的系列
+                name: '日点击榜',
+                data: data.data.d1
+            },{
+                // 根据名字对应到相应的系列
+                name: '周点击榜',
+                data: data.data.d2
+            },{
+                // 根据名字对应到相应的系列
+                name: '月点击榜',
+                data: data.data.d3
+            },{
+                // 根据名字对应到相应的系列
+                name: '总点击榜',
+                data: data.data.d4
+            }]
+        });
+    });
+
+    option2 = {
+        title: {
+            text: '纵横小说排行榜'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['日点击榜','周点击榜','月点击榜','总点击榜']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ["元尊","点道为止","圣武星辰","一剑独尊"]
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            name: '日点击榜',
+            type:'line',
+            data: [14661, 13641, 10293, 7471]
+        },{
+            name: '周点击榜',
+            type:'line',
+            data: [146621, 136241, 102393, 107471]
+        },{
+            name: '月点击榜',
+            type:'line',
+            data: [2146621, 1136241, 1102393, 1107471]
+        },{
+            name: '总点击榜',
+            type:'line',
+            data: [9146621, 8136241, 7102393, 6107471]
+        }
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+</script>
